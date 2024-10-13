@@ -3,14 +3,20 @@
     internal class Argsparam
     {
         public string ScreenSaverPath { get; set; }
-        public bool? IsPassword { get; set; }
-        public int Timeout { get; set; } = -1;
-        public bool IsShow { get; set; }
+        public bool? IsSecure { get; set; }
+        public int Timeout { get; set; }
+        public bool Show { get; set; }
+        public bool Run { get; set; }
 
-        private static string[] disableKeywords = new string[]
+        private static readonly string[] disableKeywords =
         {
             "none", "null", "nul", "nil", "disable", "off", "false", "no", "0",
-            "無", "なし", "無効", "オフ", "偽", "いいえ"
+            "無", "無し", "なし", "無効", "オフ", "偽", "いいえ"
+        };
+        private static readonly string[] enableKeywords =
+        {
+            "enable", "on", "true", "ok", "yes", "1",
+            "有", "有り", "あり", "有効", "オン", "正", "はい"
         };
 
         public Argsparam(string[] args)
@@ -22,7 +28,7 @@
                     case "/t":
                     case "-t":
                     case "--timeout":
-                        this.Timeout = int.TryParse(args[++i], out int num) ? num : -1;
+                        this.Timeout = int.TryParse(args[++i], out int num) ? num : 0;
                         break;
                     case "/s":
                     case "-s":
@@ -37,14 +43,31 @@
                     case "/l":
                     case "-l":
                     case "--lock":
-                        this.IsPassword = !disableKeywords.Contains(args[++i].ToLower());
+                        string lockText = args[++i].ToLower();
+                        if (disableKeywords.Contains(lockText))
+                        {
+                            this.IsSecure = false;
+                        }
+                        else if (enableKeywords.Contains(lockText))
+                        {
+                            this.IsSecure = true;
+                        }
                         break;
                     case "/i":
                     case "-i":
                     case "--info":
-                        this.IsShow = true;
+                        this.Show = true;
+                        break;
+                    case "/r":
+                    case "-r":
+                    case "--run":
+                        this.Run = true;
                         break;
                 }
+            }
+            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60 && !this.Run)
+            {
+                this.Show = true;
             }
         }
     }

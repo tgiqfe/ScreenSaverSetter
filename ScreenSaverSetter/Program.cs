@@ -1,24 +1,23 @@
-﻿using Microsoft.Win32;
-using ScreenSaverSetter;
-using System.Text.Json;
-
-
+﻿using ScreenSaverSetter;
 
 var ap = new Argsparam(args);
-ScreenSaverSetting sss = new();
-sss.GetCurrent();
-
-
-
-string json = JsonSerializer.Serialize(sss, new JsonSerializerOptions()
+ScreenSaverSetting sss = new(true);
+if (ap.Show)
 {
-    WriteIndented = true
-});
-Console.WriteLine(json);
+    PrintText.Show(sss.ScreenSaverPath, sss.IsSecure, sss.Timeout, sss.IsRunning);
+}
+else if (ap.Run)
+{
+    sss.Run();
+}
+else
+{
+    sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
+}
 
-//sss.Run();
-
+#if DEBUG
 Console.ReadLine();
+#endif
 
 /*
  * http://mrxray.on.coocan.jp/Delphi/plSamples/S07_SystemParametersInfo_ScreemSaver.htm
