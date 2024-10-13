@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ScreenSaverSetter
 {
-    internal class PresetScreenSavers
+    public class PresetScreenSavers
     {
         private List<PreScreenSaver> _items;
 
