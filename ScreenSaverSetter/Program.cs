@@ -1,4 +1,5 @@
 ﻿using ScreenSaverSetter;
+using System.Reflection;
 
 var ap = new Argsparam(args);
 ScreenSaverSetting sss = new(true);
@@ -9,6 +10,11 @@ if (ap.Show)
 else if (ap.Run)
 {
     sss.Run();
+}
+else if (ap.Version)
+{
+    var version = Assembly.GetExecutingAssembly().GetName().Version;
+    Console.WriteLine($"ScreenSaverSetter version: {version.Major}.{version.Minor}.{version.Build}.{version.Revision}");
 }
 else
 {

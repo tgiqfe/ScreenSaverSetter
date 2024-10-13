@@ -7,6 +7,7 @@
         public int Timeout { get; set; }
         public bool Show { get; set; }
         public bool Run { get; set; }
+        public bool Version { get; set; }
 
         private static readonly string[] disableKeywords =
         {
@@ -63,9 +64,14 @@
                     case "--run":
                         this.Run = true;
                         break;
+                    case "/v":
+                    case "-v":
+                    case "--version":
+                        this.Version = true;
+                        break;
                 }
             }
-            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60 && !this.Run)
+            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60 && !this.Run && !this.Version)
             {
                 this.Show = true;
             }
