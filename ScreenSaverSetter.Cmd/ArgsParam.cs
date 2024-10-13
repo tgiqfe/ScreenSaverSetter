@@ -40,7 +40,7 @@ namespace ScreenSaverSetter.Cmd
                     case "/s":
                     case "-s":
                     case "--screensaver":
-                        this.ScreenSaverPath = Item.PresetScreenSavers.GetScreenSaverPath(args[++i]);
+                        this.ScreenSaverPath = PresetScreenSavers.GetScreenSaverPath(args[++i]);
                         break;
                     case "/n":
                     case "-n":

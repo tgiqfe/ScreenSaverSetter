@@ -15,7 +15,7 @@ namespace ScreenSaverSetter.Cmd
     Return to logon  : {1}
     Wait time        : {2} seconds
     Running          : {3}",
-Item.PresetScreenSavers.ConvertPathToPresetname(path),
+PresetScreenSavers.ConvertPathToPresetname(path),
 isSecure ? "Enable" : "Disable",
 timeout,
 isRunning

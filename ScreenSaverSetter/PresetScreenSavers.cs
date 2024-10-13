@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ScreenSaverSetter
+﻿namespace ScreenSaverSetter
 {
+    /// <summary>
+    /// Preset Screensaver collector.
+    /// </summary>
     public class PresetScreenSavers
     {
-        private List<PreScreenSaver> _items;
-
-        class PreScreenSaver
+        class PresetScreenSaver
         {
             public string Name { get; set; }
             public string Name_jp { get; set; }
@@ -35,51 +30,48 @@ namespace ScreenSaverSetter
             }
         }
 
-        public PresetScreenSavers()
-        {
-            InitSetting();
-        }
+        private static List<PresetScreenSaver> _items = GetPresetScreenSavers();
 
-        private void InitSetting()
+        private static List<PresetScreenSaver> GetPresetScreenSavers()
         {
-            _items = new()
+            return new()
             {
-                new PreScreenSaver()
+                new PresetScreenSaver()
                 {
                     Name = "3dtext",
                     Name_jp = "3Dテキスト",
                     Aliases = new string[] { "3d text", "3D テキスト" },
                     Path = @"C:\WINDOWS\system32\ssText3d.scr"
                 },
-                new PreScreenSaver()
+                new PresetScreenSaver()
                 {
                     Name = "bubbles",
                     Name_jp = "バブル",
                     Aliases = new string[] { "Bubble" },
                     Path = @"C:\WINDOWS\system32\Bubbles.scr"
                 },
-                new PreScreenSaver()
+                new PresetScreenSaver()
                 {
                     Name = "blank",
                     Name_jp = "ブランク",
                     Aliases = new string[] { "Blanc", "Brank", "Branc" },
                     Path = @"C:\WINDOWS\system32\scrnsave.scr"
                 },
-                new PreScreenSaver()
+                new PresetScreenSaver()
                 {
                     Name = "lineart",
                     Name_jp = "ライン アート",
                     Aliases = new string[] { "Line Art", "mystify", "ラインアート" },
                     Path = @"C:\WINDOWS\system32\Mystify.scr"
                 },
-                new PreScreenSaver()
+                new PresetScreenSaver()
                 {
                     Name = "ribbons",
                     Name_jp = "リボン",
                     Aliases = new string[] { "Ribbon" },
                     Path = @"C:\WINDOWS\system32\Ribbons.scr"
                 },
-                new PreScreenSaver()
+                new PresetScreenSaver()
                 {
                     Name = "picture",
                     Name_jp = "写真",
@@ -89,13 +81,13 @@ namespace ScreenSaverSetter
             };
         }
 
-        public string GetScreenSaverPath(string keyword)
+        public static string GetScreenSaverPath(string keyword)
         {
             var ssItem = _items.FirstOrDefault(x => x.IsKeywordMatch(keyword));
             return ssItem == null ? keyword : ssItem.Path;
         }
 
-        public string ConvertPathToPresetname(string path)
+        public static string ConvertPathToPresetname(string path)
         {
             if (string.IsNullOrEmpty(path))
             {
