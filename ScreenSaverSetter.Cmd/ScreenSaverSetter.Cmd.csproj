@@ -10,4 +10,8 @@
     <ProjectReference Include="..\ScreenSaverSetter\ScreenSaverSetter.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy $(TargetDir)$(ProjectName).exe $(TargetDir)sss.exe /Y" />
+  </Target>
+
 </Project>
