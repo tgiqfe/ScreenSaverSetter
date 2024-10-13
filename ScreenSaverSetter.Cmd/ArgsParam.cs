@@ -8,12 +8,19 @@ namespace ScreenSaverSetter.Cmd
 {
     internal class ArgsParam
     {
+        public enum CommandAction
+        {
+            None,
+            Show,
+            Run,
+            Version,
+            SetParameter
+        }
+
         public string ScreenSaverPath { get; set; }
         public bool? IsSecure { get; set; }
         public int Timeout { get; set; }
-        public bool Show { get; set; }
-        public bool Run { get; set; }
-        public bool Version { get; set; }
+        public CommandAction Action { get; set; } = CommandAction.Show;
 
         private static readonly string[] disableKeywords =
         {
@@ -36,16 +43,19 @@ namespace ScreenSaverSetter.Cmd
                     case "-t":
                     case "--timeout":
                         this.Timeout = int.TryParse(args[++i], out int num) ? num : 0;
+                        this.Action = CommandAction.SetParameter;
                         break;
                     case "/s":
                     case "-s":
                     case "--screensaver":
                         this.ScreenSaverPath = PresetScreenSavers.GetScreenSaverPath(args[++i]);
+                        this.Action = CommandAction.SetParameter;
                         break;
                     case "/n":
                     case "-n":
                     case "--noscreensaver":
                         this.ScreenSaverPath = "";
+                        this.Action = CommandAction.SetParameter;
                         break;
                     case "/l":
                     case "-l":
@@ -54,32 +64,30 @@ namespace ScreenSaverSetter.Cmd
                         if (disableKeywords.Contains(lockText))
                         {
                             this.IsSecure = false;
+                            this.Action = CommandAction.SetParameter;
                         }
                         else if (enableKeywords.Contains(lockText))
                         {
                             this.IsSecure = true;
+                            this.Action = CommandAction.SetParameter;
                         }
                         break;
                     case "/i":
                     case "-i":
                     case "--info":
-                        this.Show = true;
+                        this.Action = CommandAction.Show;
                         break;
                     case "/r":
                     case "-r":
                     case "--run":
-                        this.Run = true;
+                        this.Action = CommandAction.Run;
                         break;
                     case "/v":
                     case "-v":
                     case "--version":
-                        this.Version = true;
+                        this.Action = CommandAction.Version;
                         break;
                 }
-            }
-            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60 && !this.Run && !this.Version)
-            {
-                this.Show = true;
             }
         }
     }

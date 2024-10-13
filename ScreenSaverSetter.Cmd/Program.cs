@@ -2,24 +2,23 @@
 using ScreenSaverSetter.Cmd;
 using System.Reflection;
 
-var ap = new ArgsParam(args);
 ScreenSaver sss = new(true);
-if (ap.Show)
+var ap = new ArgsParam(args);
+switch (ap.Action)
 {
-    PrintText.Show(sss.ScreenSaverPath, sss.IsSecure, sss.Timeout, sss.IsRunning);
-}
-else if (ap.Run)
-{
-    sss.Run();
-}
-else if (ap.Version)
-{
-    var version = Assembly.GetAssembly(typeof(ScreenSaver)).GetName().Version;
-    Console.WriteLine($"ScreenSaverSetter version: {version.Major}.{version.Minor}.{version.Build}.{version.Revision}");
-}
-else
-{
-    sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
+    case ArgsParam.CommandAction.Show:
+        PrintText.Show(sss.ScreenSaverPath, sss.IsSecure, sss.Timeout, sss.IsRunning);
+        break;
+    case ArgsParam.CommandAction.Run:
+        sss.Run();
+        break;
+    case ArgsParam.CommandAction.Version:
+        var version = Assembly.GetAssembly(typeof(ScreenSaver)).GetName().Version;
+        Console.WriteLine($"ScreenSaverSetter version: {version.Major}.{version.Minor}.{version.Build}.{version.Revision}");
+        break;
+    case ArgsParam.CommandAction.SetParameter:
+        sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
+        break;
 }
 
 #if DEBUG
