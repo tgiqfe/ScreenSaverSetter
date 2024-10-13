@@ -6,15 +6,18 @@ using System.Text.Json;
 
 var ap = new Argsparam(args);
 ScreenSaverSetting sss = new(true);
-sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
-
-string json = JsonSerializer.Serialize(sss, new JsonSerializerOptions()
+if (ap.Show)
 {
-    WriteIndented = true
-});
-Console.WriteLine(json);
-
-//sss.Run();
+    PrintText.Show(sss.ScreenSaverPath, sss.IsSecure, sss.Timeout);
+}
+else if (ap.Run)
+{
+    sss.Run();
+}
+else
+{
+    sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
+}
 
 Console.ReadLine();
 

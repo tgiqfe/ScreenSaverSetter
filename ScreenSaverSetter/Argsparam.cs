@@ -5,7 +5,8 @@
         public string ScreenSaverPath { get; set; }
         public bool? IsSecure { get; set; }
         public int Timeout { get; set; }
-        public bool IsShow { get; set; }
+        public bool Show { get; set; }
+        public bool Run { get; set; }
 
         private static string[] disableKeywords = new string[]
         {
@@ -42,9 +43,18 @@
                     case "/i":
                     case "-i":
                     case "--info":
-                        this.IsShow = true;
+                        this.Show = true;
+                        break;
+                    case "/r":
+                    case "-r":
+                    case "--run":
+                        this.Run = true;
                         break;
                 }
+            }
+            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60)
+            {
+                this.Show = true;
             }
         }
     }

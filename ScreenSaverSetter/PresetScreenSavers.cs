@@ -94,5 +94,15 @@ namespace ScreenSaverSetter
             var ssItem = _items.FirstOrDefault(x => x.IsKeywordMatch(keyword));
             return ssItem == null ? keyword : ssItem.Path;
         }
+
+        public string ConvertPathToPresetname(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return "(None)";
+            }
+            var ssItem = _items.FirstOrDefault(x => x.Path.Equals(path, StringComparison.OrdinalIgnoreCase));
+            return ssItem == null ? path : ssItem.Name_jp;
+        }
     }
 }

@@ -60,9 +60,9 @@ namespace ScreenSaverSetter
         #endregion
         #region Public Properties
 
-        private bool? IsActive { get; set; }
-        public bool? IsSecure { get; set; }
-        public int? Timeout { get; set; }
+        private bool IsActive { get; set; }
+        public bool IsSecure { get; set; }
+        public int Timeout { get; set; }
         public string ScreenSaverPath { get; set; }
         public bool? IsRunning { get; set; }
 
@@ -121,22 +121,25 @@ namespace ScreenSaverSetter
         /// <param name="path"></param>
         public void SetParameter(bool? isSecure, int timeout, string path)
         {
-            using (var regKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
+            if (isSecure != null || timeout >= 60 || path != null)
             {
-                if (isSecure != null || timeout >= 60 || path != null)
+                using (var regKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
                 {
                     SetScreenSaverActive(regKey, true);
+                    SetScreenSaverSecure(regKey, isSecure);
+                    SetScreenSaverTimeout(regKey, timeout);
+                    SetScreenSaverPath(regKey, path);
                 }
-                SetScreenSaverSecure(regKey, isSecure);
-                SetScreenSaverTimeout(regKey, timeout);
-                SetScreenSaverPath(regKey, path);
             }
         }
 
         private void SetScreenSaverActive(RegistryKey regKey, bool isActive = false)
         {
-            uint value = isActive ? 1U : 0U;
-            SystemParametersInfo(SPI.SPI_SETSCREENSAVEACTIVE, value, ref value, SPIF.SPIF_SENDCHANGE);
+            if (this.IsActive != isActive)
+            {
+                uint value = isActive ? 1U : 0U;
+                SystemParametersInfo(SPI.SPI_SETSCREENSAVEACTIVE, value, ref value, SPIF.SPIF_SENDCHANGE);
+            }
 
             string valName = "ScreenSaveActive";
             if (isActive)
@@ -154,7 +157,7 @@ namespace ScreenSaverSetter
 
         private void SetScreenSaverSecure(RegistryKey regKey, bool? isSecure)
         {
-            if (isSecure != null)
+            if (isSecure != null && this.IsSecure != isSecure)
             {
                 uint value = isSecure == true ? 1U : 0U;
                 SystemParametersInfo(SPI.SPI_SETSCREENSAVESECURE, value, ref value, SPIF.SPIF_SENDCHANGE);
@@ -176,7 +179,7 @@ namespace ScreenSaverSetter
 
         private void SetScreenSaverTimeout(RegistryKey regKey, int timeout)
         {
-            if (timeout >= 60)
+            if (timeout >= 60 && this.Timeout != timeout)
             {
                 uint value = (uint)timeout;
                 SystemParametersInfo(SPI.SPI_SETSCREENSAVETIMEOUT, value, ref value, SPIF.SPIF_SENDCHANGE);
@@ -189,7 +192,7 @@ namespace ScreenSaverSetter
         private void SetScreenSaverPath(RegistryKey regKey, string path)
         {
             string valName = "SCRNSAVE.EXE";
-            if (path != null)
+            if (path != null && this.ScreenSaverPath != path)
             {
                 if (path != "")
                 {
