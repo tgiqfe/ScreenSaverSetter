@@ -8,10 +8,15 @@
         public bool Show { get; set; }
         public bool Run { get; set; }
 
-        private static string[] disableKeywords = new string[]
+        private static readonly string[] disableKeywords =
         {
             "none", "null", "nul", "nil", "disable", "off", "false", "no", "0",
-            "無", "なし", "無効", "オフ", "偽", "いいえ"
+            "無", "無し", "なし", "無効", "オフ", "偽", "いいえ"
+        };
+        private static readonly string[] enableKeywords =
+        {
+            "enable", "on", "true", "ok", "yes", "1",
+            "有", "有り", "あり", "有効", "オン", "正", "はい"
         };
 
         public Argsparam(string[] args)
@@ -38,7 +43,15 @@
                     case "/l":
                     case "-l":
                     case "--lock":
-                        this.IsSecure = !disableKeywords.Contains(args[++i].ToLower());
+                        string lockText = args[++i].ToLower();
+                        if (disableKeywords.Contains(lockText))
+                        {
+                            this.IsSecure = false;
+                        }
+                        else if (enableKeywords.Contains(lockText))
+                        {
+                            this.IsSecure = true;
+                        }
                         break;
                     case "/i":
                     case "-i":
@@ -52,7 +65,7 @@
                         break;
                 }
             }
-            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60)
+            if (this.ScreenSaverPath == null && this.IsSecure == null && this.Timeout < 60 && !this.Run)
             {
                 this.Show = true;
             }

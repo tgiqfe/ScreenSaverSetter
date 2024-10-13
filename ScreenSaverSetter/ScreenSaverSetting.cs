@@ -64,7 +64,7 @@ namespace ScreenSaverSetter
         public bool IsSecure { get; set; }
         public int Timeout { get; set; }
         public string ScreenSaverPath { get; set; }
-        public bool? IsRunning { get; set; }
+        public bool IsRunning { get; set; }
 
         #endregion
 
