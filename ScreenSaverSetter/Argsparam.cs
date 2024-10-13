@@ -3,8 +3,8 @@
     internal class Argsparam
     {
         public string ScreenSaverPath { get; set; }
-        public bool? IsPassword { get; set; }
-        public int Timeout { get; set; } = -1;
+        public bool? IsSecure { get; set; }
+        public int Timeout { get; set; }
         public bool IsShow { get; set; }
 
         private static string[] disableKeywords = new string[]
@@ -22,7 +22,7 @@
                     case "/t":
                     case "-t":
                     case "--timeout":
-                        this.Timeout = int.TryParse(args[++i], out int num) ? num : -1;
+                        this.Timeout = int.TryParse(args[++i], out int num) ? num : 0;
                         break;
                     case "/s":
                     case "-s":
@@ -37,7 +37,7 @@
                     case "/l":
                     case "-l":
                     case "--lock":
-                        this.IsPassword = !disableKeywords.Contains(args[++i].ToLower());
+                        this.IsSecure = !disableKeywords.Contains(args[++i].ToLower());
                         break;
                     case "/i":
                     case "-i":

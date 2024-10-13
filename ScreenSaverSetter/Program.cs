@@ -5,10 +5,8 @@ using System.Text.Json;
 
 
 var ap = new Argsparam(args);
-ScreenSaverSetting sss = new();
-sss.GetCurrent();
-
-
+ScreenSaverSetting sss = new(true);
+sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
 
 string json = JsonSerializer.Serialize(sss, new JsonSerializerOptions()
 {

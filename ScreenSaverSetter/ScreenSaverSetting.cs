@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -67,6 +68,17 @@ namespace ScreenSaverSetter
 
         #endregion
 
+        public ScreenSaverSetting(bool loadCurrent = false)
+        {
+            if (loadCurrent)
+            {
+                GetCurrent();
+            }
+        }
+
+        /// <summary>
+        /// Get current parameters for ScreenSaver.
+        /// </summary>
         public void GetCurrent()
         {
             uint isActive = 0;
@@ -101,53 +113,94 @@ namespace ScreenSaverSetter
 
         #region Set parameter methods
 
-        public void SetParameter(bool isSecure, int timeout, string path)
+        /// <summary>
+        /// Set parameters for ScreenSaver.
+        /// </summary>
+        /// <param name="isSecure"></param>
+        /// <param name="timeout"></param>
+        /// <param name="path"></param>
+        public void SetParameter(bool? isSecure, int timeout, string path)
         {
             using (var regKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
             {
-                SetScreenSaverActive(regKey, true);
+                if (isSecure != null || timeout >= 60 || path != null)
+                {
+                    SetScreenSaverActive(regKey, true);
+                }
                 SetScreenSaverSecure(regKey, isSecure);
                 SetScreenSaverTimeout(regKey, timeout);
                 SetScreenSaverPath(regKey, path);
             }
         }
 
-        public void SetScreenSaverActive(RegistryKey regKey, bool isActive = false)
+        private void SetScreenSaverActive(RegistryKey regKey, bool isActive = false)
         {
             uint value = isActive ? 1U : 0U;
             SystemParametersInfo(SPI.SPI_SETSCREENSAVEACTIVE, value, ref value, SPIF.SPIF_SENDCHANGE);
-        }
 
-        public void SetScreenSaverSecure(RegistryKey regKey, bool isSecure = false)
-        {
-            uint value = isSecure ? 1U : 0U;
-            SystemParametersInfo(SPI.SPI_SETSCREENSAVESECURE, value, ref value, SPIF.SPIF_SENDCHANGE);
-        }
-
-        public void SetScreenSaverTimeout(RegistryKey regKey, int timeout)
-        {
-            if(timeout >= 60)
+            string valName = "ScreenSaveActive";
+            if (isActive)
             {
-                uint value = (uint)timeout;
-                SystemParametersInfo(SPI.SPI_SETSCREENSAVETIMEOUT, value, ref value, SPIF.SPIF_SENDCHANGE);
+                regKey.SetValue(valName, 0, RegistryValueKind.String);
+            }
+            else
+            {
+                if (regKey.GetValueNames().Any(x => x.Equals(valName, StringComparison.OrdinalIgnoreCase)))
+                {
+                    regKey.DeleteValue(valName);
+                }
             }
         }
 
-        public void SetScreenSaverPath(RegistryKey regKey, string path)
+        private void SetScreenSaverSecure(RegistryKey regKey, bool? isSecure)
         {
-            string valName = "SCRNSAVE.EXE";
-            if (path != null)
+            if (isSecure != null)
             {
-                if (path == "")
+                uint value = isSecure == true ? 1U : 0U;
+                SystemParametersInfo(SPI.SPI_SETSCREENSAVESECURE, value, ref value, SPIF.SPIF_SENDCHANGE);
+
+                string valName = "ScreenSaverIsSecure";
+                if (isSecure == true)
+                {
+                    regKey.SetValue(valName, "1", RegistryValueKind.String);
+                }
+                else
                 {
                     if (regKey.GetValueNames().Any(x => x.Equals(valName, StringComparison.OrdinalIgnoreCase)))
                     {
                         regKey.DeleteValue(valName);
                     }
                 }
+            }
+        }
+
+        private void SetScreenSaverTimeout(RegistryKey regKey, int timeout)
+        {
+            if (timeout >= 60)
+            {
+                uint value = (uint)timeout;
+                SystemParametersInfo(SPI.SPI_SETSCREENSAVETIMEOUT, value, ref value, SPIF.SPIF_SENDCHANGE);
+
+                string valName = "ScreenSaveTimeOut";
+                regKey.SetValue(valName, timeout.ToString(), RegistryValueKind.String);
+            }
+        }
+
+        private void SetScreenSaverPath(RegistryKey regKey, string path)
+        {
+            string valName = "SCRNSAVE.EXE";
+            if (path != null)
+            {
+                if (path != "")
+                {
+                    regKey.SetValue(valName, path, RegistryValueKind.String);
+                }
                 else
                 {
-                    regKey.SetValue(valName, path);
+                    if (regKey.GetValueNames().Any(x => x.Equals(valName, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        regKey.DeleteValue(valName);
+                    }
                 }
             }
         }
