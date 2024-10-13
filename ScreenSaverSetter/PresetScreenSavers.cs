@@ -8,7 +8,32 @@ namespace ScreenSaverSetter
 {
     internal class PresetScreenSavers
     {
-        private List<ScreenSaverItem> _items;
+        private List<PreScreenSaver> _items;
+
+        class PreScreenSaver
+        {
+            public string Name { get; set; }
+            public string Name_jp { get; set; }
+            public string[] Aliases { get; set; }
+            public string Path { get; set; }
+
+            public bool IsKeywordMatch(string keyword)
+            {
+                if (this.Name.Equals(keyword, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                if (this.Name_jp.Equals(keyword, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                if (this.Aliases.Contains(keyword, StringComparer.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public PresetScreenSavers()
         {
@@ -19,42 +44,42 @@ namespace ScreenSaverSetter
         {
             _items = new()
             {
-                new ScreenSaverItem()
+                new PreScreenSaver()
                 {
                     Name = "3dtext",
                     Name_jp = "3Dテキスト",
                     Aliases = new string[] { "3d text", "3D テキスト" },
                     Path = @"C:\WINDOWS\system32\ssText3d.scr"
                 },
-                new ScreenSaverItem()
+                new PreScreenSaver()
                 {
                     Name = "bubbles",
                     Name_jp = "バブル",
                     Aliases = new string[] { "Bubble" },
                     Path = @"C:\WINDOWS\system32\Bubbles.scr"
                 },
-                new ScreenSaverItem()
+                new PreScreenSaver()
                 {
                     Name = "blank",
                     Name_jp = "ブランク",
                     Aliases = new string[] { "Blanc", "Brank", "Branc" },
                     Path = @"C:\WINDOWS\system32\scrnsave.scr"
                 },
-                new ScreenSaverItem()
+                new PreScreenSaver()
                 {
                     Name = "lineart",
                     Name_jp = "ライン アート",
                     Aliases = new string[] { "Line Art", "mystify", "ラインアート" },
                     Path = @"C:\WINDOWS\system32\Mystify.scr"
                 },
-                new ScreenSaverItem()
+                new PreScreenSaver()
                 {
                     Name = "ribbons",
                     Name_jp = "リボン",
                     Aliases = new string[] { "Ribbon" },
                     Path = @"C:\WINDOWS\system32\Ribbons.scr"
                 },
-                new ScreenSaverItem()
+                new PreScreenSaver()
                 {
                     Name = "picture",
                     Name_jp = "写真",

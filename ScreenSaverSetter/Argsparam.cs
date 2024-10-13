@@ -3,9 +3,15 @@
     internal class Argsparam
     {
         public string ScreenSaverPath { get; set; }
-        public bool IsNone { get; set; }
         public bool? IsPassword { get; set; }
         public int Timeout { get; set; } = -1;
+        public bool IsShow { get; set; }
+
+        private static string[] disableKeywords = new string[]
+        {
+            "none", "null", "nul", "nil", "disable", "off", "false", "no", "0",
+            "無", "なし", "無効", "オフ", "偽", "いいえ"
+        };
 
         public Argsparam(string[] args)
         {
@@ -26,14 +32,17 @@
                     case "/n":
                     case "-n":
                     case "--noscreensaver":
-                        this.IsNone = true;
+                        this.ScreenSaverPath = "";
                         break;
-                    case "/p":
-                    case "-p":
-                    case "--password":
-
-
-
+                    case "/l":
+                    case "-l":
+                    case "--lock":
+                        this.IsPassword = !disableKeywords.Contains(args[++i].ToLower());
+                        break;
+                    case "/i":
+                    case "-i":
+                    case "--info":
+                        this.IsShow = true;
                         break;
                 }
             }

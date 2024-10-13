@@ -1,29 +1,22 @@
 ﻿using Microsoft.Win32;
 using ScreenSaverSetter;
-
-Console.WriteLine("Hello, World!");
-
+using System.Text.Json;
 
 
 
-uint res = 0;
-PInvoke.SystemParametersInfo(
-    PInvoke.SPI.SPI_SETSCREENSAVESECURE,
-    1,
-    ref res,
-    PInvoke.SPIF.SPIF_SENDCHANGE);
-/*
-using (var regKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
+var ap = new Argsparam(args);
+ScreenSaverSetting sss = new();
+sss.GetCurrent();
+
+
+
+string json = JsonSerializer.Serialize(sss, new JsonSerializerOptions()
 {
-    regKey.SetValue("ScreenSaverIsSecure", "1");
-}
-*/
+    WriteIndented = true
+});
+Console.WriteLine(json);
 
-
-
-
-
-
+//sss.Run();
 
 Console.ReadLine();
 
