@@ -16,10 +16,16 @@ switch (ap.Action)
         var version = Assembly.GetAssembly(typeof(ScreenSaver)).GetName().Version;
         Console.WriteLine($"ScreenSaverSetter version: {version.Major}.{version.Minor}.{version.Build}.{version.Revision}");
         break;
+    case ArgsParam.CommandAction.Help:
+        var text = ScreenSaverSetter.Cmd.Properties.Resources.HelpFile;
+        Console.WriteLine(text);
+        break;
     case ArgsParam.CommandAction.SetParameter:
         sss.SetParameter(ap.IsSecure, ap.Timeout, ap.ScreenSaverPath);
         break;
 }
+
+
 
 #if DEBUG
 Console.ReadLine();

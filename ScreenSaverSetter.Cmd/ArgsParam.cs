@@ -14,6 +14,7 @@ namespace ScreenSaverSetter.Cmd
             Show,
             Run,
             Version,
+            Help,
             SetParameter
         }
 
@@ -86,6 +87,12 @@ namespace ScreenSaverSetter.Cmd
                     case "-v":
                     case "--version":
                         this.Action = CommandAction.Version;
+                        break;
+                    case "/h":
+                    case "-h":
+                    case "/?":
+                    case "--help":
+                        this.Action = CommandAction.Help;
                         break;
                 }
             }
