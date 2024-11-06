@@ -135,17 +135,7 @@ namespace ScreenSaverSetter
             }
 
             string valName = "ScreenSaveActive";
-            if (isActive)
-            {
-                regKey.SetValue(valName, 0, RegistryValueKind.String);
-            }
-            else
-            {
-                if (regKey.GetValueNames().Any(x => x.Equals(valName, StringComparison.OrdinalIgnoreCase)))
-                {
-                    regKey.DeleteValue(valName);
-                }
-            }
+            regKey.SetValue(valName, isActive ? "1" : "0", RegistryValueKind.String);
         }
 
         private void SetScreenSaverSecure(RegistryKey regKey, bool? isSecure)
