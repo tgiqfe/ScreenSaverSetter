@@ -14,7 +14,7 @@
                 "":
                 PresetScreenSavers.GetScreenSaverPath(screenSaverPath);
             
-            var sss = new ScreenSaver();
+            var sss = new ScreenSaver(true);
             sss.SetParameter(isLock, timeout, ssPath);
         }
     }
