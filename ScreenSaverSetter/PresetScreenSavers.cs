@@ -78,6 +78,13 @@
                     Aliases = new string[] { "Photo", "Pictures", "フォト", "ピクチャ", "ピクチャー" },
                     Path = @"C:\WINDOWS\system32\PhotoScreensaver.scr"
                 },
+                new PresetScreenSaver()
+                {
+                    Name = "(None)",
+                    Name_jp = "(なし)",
+                    Aliases = new string[] { "", "none", "null", "nul", "nil", "disable", "off", "false", "no", "0", "無", "無し", "なし", "無効", "オフ", "偽", "いいえ" },
+                    Path = ""
+                },
             };
         }
 

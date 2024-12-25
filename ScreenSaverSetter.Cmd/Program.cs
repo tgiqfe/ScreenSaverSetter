@@ -26,7 +26,6 @@ switch (ap.Action)
 }
 
 
-
 #if DEBUG
 Console.ReadLine();
 #endif
