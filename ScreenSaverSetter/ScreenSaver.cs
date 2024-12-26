@@ -112,9 +112,9 @@ namespace ScreenSaverSetter
         /// <param name="isSecure"></param>
         /// <param name="timeout"></param>
         /// <param name="path"></param>
-        public void SetParameter(bool? isSecure, int timeout, string path)
+        public void SetParameter(bool? isSecure, int? timeout, string path)
         {
-            if (isSecure != null || timeout >= 60 || path != null)
+            if (isSecure != null || timeout != null || path != null)
             {
                 using (var regKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", true))
                 {
@@ -170,7 +170,7 @@ namespace ScreenSaverSetter
             }
         }
 
-        private void SetScreenSaverTimeout(RegistryKey regKey, int timeout)
+        private void SetScreenSaverTimeout(RegistryKey regKey, int? timeout)
         {
             if (timeout >= 60 && this.Timeout != timeout)
             {
@@ -199,6 +199,31 @@ namespace ScreenSaverSetter
                     }
                 }
             }
+        }
+
+        #endregion
+        #region Static methods
+
+        public static void Show()
+        {
+            var sss = new ScreenSaver(true);
+            string text = string.Format(@"[ScreenSaver]
+    ScreenSaver path : {0}
+    Return to logon  : {1}
+    Wait time        : {2} seconds
+    Running          : {3}",
+PresetScreenSavers.ConvertPathToPresetname(sss.ScreenSaverPath),
+sss.IsSecure ? "Enable" : "Disable",
+sss.Timeout,
+sss.IsRunning
+);
+            Console.WriteLine(text);
+        }
+
+        public static void Update(bool? isSecure, int? timeout, string path)
+        {
+            var sss = new ScreenSaver(true);
+            sss.SetParameter(isSecure, timeout, path);
         }
 
         #endregion

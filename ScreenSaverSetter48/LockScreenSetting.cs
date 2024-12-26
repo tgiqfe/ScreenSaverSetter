@@ -10,12 +10,8 @@
         /// <param name="screenSaverPath"></param>
         public static void Update(bool? isLock, int? timeout, string screenSaverPath)
         {
-            string ssPath = string.IsNullOrEmpty(screenSaverPath) ?
-                "":
-                PresetScreenSavers.GetScreenSaverPath(screenSaverPath);
-            
             var sss = new ScreenSaver(true);
-            sss.SetParameter(isLock, timeout, ssPath);
+            sss.SetParameter(isLock, timeout, screenSaverPath);
         }
     }
 }
