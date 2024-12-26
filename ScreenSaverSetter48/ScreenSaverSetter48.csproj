@@ -44,7 +44,6 @@
     <Compile Include="PresetScreenSaver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScreenSaver.cs" />
-    <Compile Include="LockScreenSetting.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

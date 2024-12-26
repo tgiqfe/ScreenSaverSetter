@@ -108,6 +108,23 @@ namespace ScreenSaverSetter
             PostMessage(HWND_BROADCAST, WM_SYSCOMMAND, SC_SCREENSAVE, IntPtr.Zero);
         }
 
+        /// <summary>
+        /// Print ScreenSaver setting info.
+        /// </summary>
+        public void Print()
+        {
+            string text = string.Format(@"[ScreenSaver]
+    ScreenSaver path : {0}
+    Return to logon  : {1}
+    Wait time        : {2} seconds
+    Running          : {3}",
+                PresetScreenSavers.ConvertPathToPresetname(this.ScreenSaverPath),
+                this.IsSecure ? "Enable" : "Disable",
+                this.Timeout,
+                this.IsRunning);
+            Console.WriteLine(text);
+        }
+
         #region Set parameter methods
 
         /// <summary>
@@ -211,17 +228,7 @@ namespace ScreenSaverSetter
         public static void Show()
         {
             var sss = new ScreenSaver(true);
-            string text = string.Format(@"[ScreenSaver]
-    ScreenSaver path : {0}
-    Return to logon  : {1}
-    Wait time        : {2} seconds
-    Running          : {3}",
-PresetScreenSavers.ConvertPathToPresetname(sss.ScreenSaverPath),
-sss.IsSecure ? "Enable" : "Disable",
-sss.Timeout,
-sss.IsRunning
-);
-            Console.WriteLine(text);
+            sss.Print();
         }
 
         public static void Update(bool? isSecure, int? timeout, string path)
